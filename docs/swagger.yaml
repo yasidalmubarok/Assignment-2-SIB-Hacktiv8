@@ -1,0 +1,169 @@
+definitions:
+  dto.DeleteOrdersResponse:
+    properties:
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  dto.GetItemResponse:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      itemCode:
+        type: string
+      itemId:
+        type: integer
+      orderId:
+        type: integer
+      quantity:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  dto.GetOrdersResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/dto.OrderWithItems'
+        type: array
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  dto.NewItemRequest:
+    properties:
+      description:
+        type: string
+      itemCode:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  dto.NewOrderRequest:
+    properties:
+      customerName:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/dto.NewItemRequest'
+        type: array
+      orderedAt:
+        example: "2023-07-10T21:21:46+00:00"
+        type: string
+    type: object
+  dto.NewOrderResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  dto.OrderWithItems:
+    properties:
+      createdAt:
+        type: string
+      customerName:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/dto.GetItemResponse'
+        type: array
+      orderId:
+        type: integer
+      orderedAt:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /orders:
+    get:
+      description: Get Order with Item Data
+      operationId: get-order-datas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetOrdersResponse'
+      summary: ping example
+      tags:
+      - orders
+    post:
+      consumes:
+      - application/json
+      description: Create Order Data
+      operationId: create-new-order
+      parameters:
+      - description: request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.NewOrderResponse'
+      summary: ping example
+      tags:
+      - orders
+  /orders/{orderId}:
+    delete:
+      description: Delete Order Data by Id
+      operationId: delete-order-data
+      parameters:
+      - description: orders id
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.DeleteOrdersResponse'
+      summary: ping example
+      tags:
+      - orders
+    put:
+      consumes:
+      - application/json
+      description: Update Order Data by Id
+      operationId: update-order-with-item-data
+      parameters:
+      - description: request body json
+        in: body
+        name: RequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NewOrderRequest'
+      - description: order's id
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.NewOrderResponse'
+      summary: ping example
+      tags:
+      - orders
+swagger: "2.0"
